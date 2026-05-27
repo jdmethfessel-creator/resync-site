@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReSync — Real Estate Operations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --navy: #0b0f1a;
+    --navy-mid: #141926;
+    --navy-light: #1e2536;
+    --gold: #c8a96e;
+    --gold-light: #d4b97e;
+    --white: #ffffff;
+    --gray: #8b95a8;
+    --gray-light: #6b7280;
+    --border: rgba(255,255,255,0.07);
+    --body-bg: #f4f2ee;
+    --body-text: #1a1a1a;
+    --muted: #666;
+    --card-bg: #ffffff;
+    --card-border: #e8e4dc;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--body-bg);
+    color: var(--body-text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* NAV */
+  nav {
+    background: var(--navy);
+    padding: 16px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-mark {
+    width: 30px;
+    height: 30px;
+    background: var(--gold);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--navy);
+  }
+
+  .logo-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: var(--white);
+    letter-spacing: -0.3px;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .nav-link {
+    font-size: 13px;
+    color: var(--gray);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-link:hover { color: var(--white); }
+
+  .nav-cta {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--navy);
+    background: var(--gold);
+    padding: 8px 18px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+
+  .nav-cta:hover { background: var(--gold-light); }
+
+  /* HERO */
+  .hero {
+    background: var(--navy);
+    padding: 80px 48px 64px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -120px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(200,169,110,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 5px 14px;
+    border-radius: 99px;
+    background: rgba(200,169,110,0.12);
+    color: var(--gold);
+    margin-bottom: 24px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: 1px solid rgba(200,169,110,0.2);
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 44px;
+    font-weight: 500;
+    color: var(--white);
+    line-height: 1.2;
+    max-width: 620px;
+    margin: 0 auto 20px;
+    letter-spacing: -0.5px;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero p {
+    font-size: 16px;
+    color: var(--gray);
+    max-width: 480px;
+    margin: 0 auto 36px;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 56px;
+  }
+
+  .btn-primary {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--navy);
+    background: var(--gold);
+    padding: 12px 26px;
+    border-radius: 7px;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+
+  .btn-primary:hover { background: var(--gold-light); }
+
+  .btn-secondary {
+    font-size: 14px;
+    color: var(--gray);
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 12px 26px;
+    border-radius: 7px;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .btn-secondary:hover { border-color: rgba(255,255,255,0.3); color: var(--white); }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 560px;
+    margin: 0 auto;
+    border-top: 1px solid var(--border);
+    padding-top: 36px;
+  }
+
+  .stat { text-align: center; }
+  .stat-mid { border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
+  .stat-num { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--gold); }
+  .stat-label { font-size: 11px; color: var(--gray-light); margin-top: 4px; font-weight: 300; }
+
+  /* SECTIONS */
+  section { padding: 64px 48px; }
+  section.alt { background: #eeeae3; }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #999;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--body-text);
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .section-sub {
+    font-size: 15px;
+    color: var(--muted);
+    max-width: 520px;
+    margin-bottom: 40px;
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  /* WHAT WE BRING */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .product-card {
+    background: var(--navy);
+    border-radius: 12px;
+    padding: 28px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .product-card::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 120px; height: 120px;
+    background: radial-gradient(circle, rgba(200,169,110,0.1) 0%, transparent 70%);
+  }
+
+  .product-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    color: rgba(200,169,110,0.2);
+    margin-bottom: 12px;
+    line-height: 1;
+  }
+
+  .product-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+
+  .product-desc {
+    font-size: 13px;
+    color: var(--gray);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  .product-tag {
+    display: inline-block;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: rgba(200,169,110,0.15);
+    color: var(--gold);
+    margin-top: 14px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+
+  /* AUTOMATION */
+  .auto-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .auto-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .auto-icon {
+    width: 36px;
+    height: 36px;
+    background: rgba(200,169,110,0.1);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .auto-content {}
+  .auto-title { font-size: 14px; font-weight: 500; color: var(--body-text); margin-bottom: 4px; }
+  .auto-desc { font-size: 12px; color: var(--muted); line-height: 1.5; font-weight: 300; }
+  .auto-save { font-size: 11px; color: var(--gold); margin-top: 6px; font-weight: 500; }
+
+  /* COORDINATOR */
+  .coord-box {
+    background: var(--navy);
+    border-radius: 14px;
+    padding: 40px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+
+  .coord-left h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    color: var(--white);
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+
+  .coord-left p {
+    font-size: 14px;
+    color: var(--gray);
+    line-height: 1.7;
+    font-weight: 300;
+    margin-bottom: 16px;
+  }
+
+  .coord-right {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+  }
+
+  .coord-comparison { display: flex; flex-direction: column; gap: 14px; }
+
+  .coord-row { display: flex; justify-content: space-between; align-items: center; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+  .coord-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .coord-label { font-size: 12px; color: var(--gray); }
+  .coord-old { font-size: 13px; color: #ef4444; text-decoration: line-through; }
+  .coord-new { font-size: 13px; color: #4ade80; font-weight: 500; }
+
+  /* ROI */
+  .roi-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .roi-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 24px;
+  }
+
+  .roi-card.highlight {
+    background: var(--navy);
+    border-color: var(--navy);
+  }
+
+  .roi-label { font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 8px; font-weight: 600; }
+  .roi-label.light { color: var(--gray); }
+  .roi-num { font-family: 'Playfair Display', serif; font-size: 36px; color: var(--body-text); margin-bottom: 8px; }
+  .roi-num.gold { color: var(--gold); }
+  .roi-desc { font-size: 13px; color: var(--muted); line-height: 1.6; font-weight: 300; }
+  .roi-desc.light { color: var(--gray); }
+
+  /* TIMELINE */
+  .timeline { display: flex; flex-direction: column; gap: 0; }
+  .tl-item { display: flex; gap: 24px; padding: 24px 0; border-bottom: 1px solid var(--card-border); }
+  .tl-item:last-child { border-bottom: none; }
+  .tl-period { min-width: 120px; }
+  .tl-period-label { font-size: 11px; font-weight: 600; color: var(--gold); text-transform: uppercase; letter-spacing: 0.06em; }
+  .tl-period-months { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--body-text); }
+  .tl-content-title { font-size: 15px; font-weight: 500; color: var(--body-text); margin-bottom: 6px; }
+  .tl-content-desc { font-size: 13px; color: var(--muted); line-height: 1.6; font-weight: 300; }
+
+  /* PRICING */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .pricing-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 28px 24px;
+    position: relative;
+  }
+
+  .pricing-card.featured {
+    background: var(--navy);
+    border-color: var(--gold);
+    border-width: 2px;
+  }
+
+  .featured-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    padding: 3px 12px;
+    border-radius: 99px;
+    background: var(--gold);
+    color: var(--navy);
+    font-weight: 600;
+    white-space: nowrap;
+    letter-spacing: 0.04em;
+  }
+
+  .pricing-tier { font-size: 12px; color: #999; font-weight: 500; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .pricing-tier.light { color: var(--gray); }
+  .pricing-price { font-family: 'Playfair Display', serif; font-size: 32px; color: var(--body-text); margin-bottom: 4px; }
+  .pricing-price.light { color: var(--white); }
+  .pricing-price span { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 300; color: #999; }
+  .pricing-price span.light { color: var(--gray); }
+  .pricing-desc { font-size: 12px; color: var(--muted); margin-bottom: 20px; line-height: 1.5; font-weight: 300; }
+  .pricing-desc.light { color: var(--gray); }
+  .pricing-feature { font-size: 12px; color: var(--muted); margin-bottom: 7px; display: flex; align-items: flex-start; gap: 8px; }
+  .pricing-feature.light { color: var(--gray); }
+  .check { color: var(--gold); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+  .why-box {
+    background: rgba(200,169,110,0.06);
+    border: 1px solid rgba(200,169,110,0.2);
+    border-radius: 10px;
+    padding: 20px 24px;
+  }
+
+  .why-box p { font-size: 13px; color: var(--muted); line-height: 1.7; font-weight: 300; }
+  .why-box strong { color: var(--gold); font-weight: 500; }
+
+  /* FOOTER CTA */
+  .footer-cta {
+    background: var(--navy);
+    padding: 80px 48px;
+    text-align: center;
+  }
+
+  .footer-cta h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    color: var(--white);
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+
+  .footer-cta p {
+    font-size: 15px;
+    color: var(--gray);
+    margin-bottom: 32px;
+    font-weight: 300;
+  }
+
+  .footer-note {
+    font-size: 12px;
+    color: rgba(255,255,255,0.2);
+    margin-top: 24px;
+    letter-spacing: 0.04em;
+  }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: var(--card-border); margin: 0 48px; }
+
+  @media (max-width: 768px) {
+    nav { padding: 14px 20px; }
+    .nav-links { display: none; }
+    .hero { padding: 48px 20px 40px; }
+    .hero h1 { font-size: 28px; }
+    section { padding: 48px 20px; }
+    .products-grid, .auto-grid, .roi-grid, .pricing-grid { grid-template-columns: 1fr; }
+    .coord-box { grid-template-columns: 1fr; }
+    .stats-row { grid-template-columns: 1fr; gap: 20px; }
+    .stat-mid { border: none; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 20px 0; }
+    .footer-cta { padding: 48px 20px; }
+    .divider { margin: 0 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">
+    <div class="logo-mark">↻</div>
+    <span class="logo-name">ReSync</span>
+  </div>
+  <div class="nav-links">
+    <a href="#services" class="nav-link">What we do</a>
+    <a href="#roi" class="nav-link">The ROI</a>
+    <a href="#pricing" class="nav-link">Pricing</a>
+    <a href="#contact" class="nav-cta">Book a call</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">Real Estate Operations</div>
+  <h1>Your firm should be closing deals. Not managing <em>the paperwork around them.</em></h1>
+  <p>ReSync builds AI-powered operations systems for independent real estate firms — and absorbs the administrative role so you don't have to hire for it.</p>
+  <div class="hero-btns">
+    <a href="#contact" class="btn-primary">Book a free discovery call</a>
+    <a href="#services" class="btn-secondary">See what we do</a>
+  </div>
+  <div class="stats-row">
+    <div class="stat">
+      <div class="stat-num">8–12 hrs</div>
+      <div class="stat-label">saved per transaction</div>
+    </div>
+    <div class="stat stat-mid">
+      <div class="stat-num">$66K</div>
+      <div class="stat-label">avg annual savings vs. hiring</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">3 days</div>
+      <div class="stat-label">average to implement</div>
+    </div>
+  </div>
+</div>
+
+<!-- WHAT WE BRING -->
+<section id="services">
+  <div class="section-label">What we bring</div>
+  <div class="section-title">Three things your firm gets on day one.</div>
+  <div class="section-sub">We don't just consult — we show up with finished tools, built systems, and a dedicated coordinator who manages your operations so your agents can focus on clients.</div>
+  <div class="products-grid">
+    <div class="product-card">
+      <div class="product-num">01</div>
+      <div class="product-title">Client-facing tools</div>
+      <div class="product-desc">We bring HomeBiddy — an offer analysis tool your buyer clients use to make smarter offers with comp data and a negotiation script. And HomeIQ — an inspection report tool that prices out repair findings so buyers know exactly what to negotiate. Your competitors don't have these.</div>
+      <div class="product-tag">Deployed day one</div>
+    </div>
+    <div class="product-card">
+      <div class="product-num">02</div>
+      <div class="product-title">Operations automation</div>
+      <div class="product-desc">Listing descriptions, lead follow-up sequences, client onboarding, CMA report drafting, transaction coordination checklists. The manual work your team is doing every day — automated so they stop doing it.</div>
+      <div class="product-tag">Live within 3 days</div>
+    </div>
+    <div class="product-card">
+      <div class="product-num">03</div>
+      <div class="product-title">Your dedicated coordinator</div>
+      <div class="product-desc">A ReSync coordinator manages your operations on an ongoing basis — reviewing outputs, handling exceptions, and expanding your systems each month. You get the output of a full-time hire without the salary, benefits, or management overhead.</div>
+      <div class="product-tag">Ongoing, included</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- AUTOMATION DETAIL -->
+<section class="alt">
+  <div class="section-label">What we automate</div>
+  <div class="section-title">Every hour your team isn't doing this is an hour they're closing deals.</div>
+  <div class="section-sub">These are the specific workflows we eliminate — with real time and cost numbers attached.</div>
+  <div class="auto-grid">
+    <div class="auto-card">
+      <div class="auto-icon">📝</div>
+      <div class="auto-content">
+        <div class="auto-title">Listing descriptions</div>
+        <div class="auto-desc">Professional, MLS-ready copy generated in 5 minutes from basic property details. No more 45-minute writing sessions per listing.</div>
+        <div class="auto-save">Saves ~$400/month in admin time for a 15-listing firm</div>
+      </div>
+    </div>
+    <div class="auto-card">
+      <div class="auto-icon">📬</div>
+      <div class="auto-content">
+        <div class="auto-title">Lead follow-up</div>
+        <div class="auto-desc">Instant personalized responses that qualify buyers and sellers and book calls automatically — 24/7, with no one on your team lifting a finger.</div>
+        <div class="auto-save">Responding in under 5 min vs 30 min doubles conversion rate</div>
+      </div>
+    </div>
+    <div class="auto-card">
+      <div class="auto-icon">🤝</div>
+      <div class="auto-content">
+        <div class="auto-title">Client onboarding</div>
+        <div class="auto-desc">Automated welcome sequences, document collection, preference surveys, and timeline setting — so every new client feels taken care of from day one without agent involvement.</div>
+        <div class="auto-save">Saves 2–3 hrs per new client relationship</div>
+      </div>
+    </div>
+    <div class="auto-card">
+      <div class="auto-icon">📊</div>
+      <div class="auto-content">
+        <div class="auto-title">CMA reports</div>
+        <div class="auto-desc">Comparable market analysis drafted in 20 minutes instead of 3 hours. Your agents review, adjust, and send — they just don't build it from scratch anymore.</div>
+        <div class="auto-save">Saves $75–90 in agent time per report</div>
+      </div>
+    </div>
+    <div class="auto-card">
+      <div class="auto-icon">✅</div>
+      <div class="auto-content">
+        <div class="auto-title">Transaction coordination</div>
+        <div class="auto-desc">Automated checklists, deadline reminders, document tracking, and client status updates from contract to close — nothing falls through the cracks.</div>
+        <div class="auto-save">Saves 5–8 hrs per transaction</div>
+      </div>
+    </div>
+    <div class="auto-card">
+      <div class="auto-icon">📱</div>
+      <div class="auto-content">
+        <div class="auto-title">Buyer & seller tools</div>
+        <div class="auto-desc">HomeBiddy gives your buyers an offer analysis and negotiation script before every offer. HomeIQ turns inspection findings into a repair cost estimate and negotiation guide. Your clients close smarter.</div>
+        <div class="auto-save">Differentiates your firm from every competitor</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COORDINATOR -->
+<section>
+  <div class="section-label">The coordinator model</div>
+  <div class="section-title">Eliminate the hire. We absorb the role.</div>
+  <div class="section-sub">Most firms at your stage are either about to hire an operations or transaction coordinator — or already have one. ReSync replaces that position entirely.</div>
+  <div class="coord-box">
+    <div class="coord-left">
+      <h3>One ReSync coordinator manages what a full-time hire couldn't.</h3>
+      <p>Because AI handles 80% of the execution, our coordinator has the capacity to manage your firm at a level a single hire never could — while you pay a fraction of what that hire would cost.</p>
+      <p>And unlike a hire, there's no onboarding time, no benefits overhead, no turnover risk, and no management burden on your end. They're already trained on the systems from day one.</p>
+      <div class="product-tag" style="display:inline-block;">Included in your retainer</div>
+    </div>
+    <div class="coord-right">
+      <div class="coord-comparison">
+        <div class="coord-row">
+          <div class="coord-label">Annual cost</div>
+          <div style="display:flex;gap:16px;align-items:center;">
+            <div class="coord-old">$55,000 hire</div>
+            <div class="coord-new">$42,000 ReSync</div>
+          </div>
+        </div>
+        <div class="coord-row">
+          <div class="coord-label">Benefits & overhead</div>
+          <div style="display:flex;gap:16px;align-items:center;">
+            <div class="coord-old">+$12,000</div>
+            <div class="coord-new">$0</div>
+          </div>
+        </div>
+        <div class="coord-row">
+          <div class="coord-label">Onboarding time</div>
+          <div style="display:flex;gap:16px;align-items:center;">
+            <div class="coord-old">4–6 weeks</div>
+            <div class="coord-new">3 days</div>
+          </div>
+        </div>
+        <div class="coord-row">
+          <div class="coord-label">HomeBiddy + HomeIQ tools</div>
+          <div style="display:flex;gap:16px;align-items:center;">
+            <div class="coord-old">Not included</div>
+            <div class="coord-new">Included</div>
+          </div>
+        </div>
+        <div class="coord-row">
+          <div class="coord-label">Monthly new automations</div>
+          <div style="display:flex;gap:16px;align-items:center;">
+            <div class="coord-old">Not included</div>
+            <div class="coord-new">Included</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ROI -->
+<section class="alt" id="roi">
+  <div class="section-label">The ROI</div>
+  <div class="section-title">The math is straightforward.</div>
+  <div class="section-sub">A firm doing 15 transactions a month with 10 agents is spending roughly $9,000/month on automatable work across two staff roles. ReSync replaces both at $3,500/month.</div>
+  <div class="roi-grid">
+    <div class="roi-card">
+      <div class="roi-label">Without ReSync</div>
+      <div class="roi-num">$9,000<span style="font-size:16px;color:#999;">/mo</span></div>
+      <div class="roi-desc">Transaction coordinator ($4,500) + marketing/operations coordinator ($4,500). Two salaries, two sets of benefits, two people to manage — doing work that's 80% automatable.</div>
+    </div>
+    <div class="roi-card highlight">
+      <div class="roi-label light">With ReSync</div>
+      <div class="roi-num gold">$3,500<span style="font-size:16px;color:var(--gray);">/mo</span></div>
+      <div class="roi-desc light">One retainer covers everything — the coordinator, the automations, HomeBiddy, HomeIQ, and ongoing builds every month. No HR. No management. No turnover.</div>
+    </div>
+    <div class="roi-card">
+      <div class="roi-label">Net monthly savings</div>
+      <div class="roi-num">$5,500</div>
+      <div class="roi-desc">Before accounting for the revenue impact of faster lead response, better buyer tools, and agents who spend their time on clients instead of paperwork.</div>
+    </div>
+    <div class="roi-card highlight">
+      <div class="roi-label light">Annual savings</div>
+      <div class="roi-num gold">$66,000</div>
+      <div class="roi-desc light">Net savings over 12 months versus maintaining two coordinator roles — plus two finished client-facing tools your competitors don't have.</div>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section>
+  <div class="section-label">Why 12 months</div>
+  <div class="section-title">The value compounds every month.</div>
+  <div class="section-sub">Month one gets you live. The next eleven months are where the real return builds — and why firms that stay the full year always renew.</div>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-period">
+        <div class="tl-period-label">Phase 1</div>
+        <div class="tl-period-months">Month 1</div>
+      </div>
+      <div class="tl-content">
+        <div class="tl-content-title">Implementation</div>
+        <div class="tl-content-desc">We map your workflows, build your core automations, deploy HomeBiddy and HomeIQ for your buyers, and get your ReSync coordinator up and running. Your team is live in 3 days. The full month is spent tuning and training.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-period">
+        <div class="tl-period-label">Phase 2</div>
+        <div class="tl-period-months">Months 2–4</div>
+      </div>
+      <div class="tl-content">
+        <div class="tl-content-title">Refinement</div>
+        <div class="tl-content-desc">We identify what's working and what needs adjustment. Your coordinator is fully embedded in how your firm operates. We start building the next layer of automations based on what we're actually seeing in your workflow.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-period">
+        <div class="tl-period-label">Phase 3</div>
+        <div class="tl-period-months">Months 5–8</div>
+      </div>
+      <div class="tl-content">
+        <div class="tl-content-title">Expansion</div>
+        <div class="tl-content-desc">New automations every month. Social content from listings. Agent performance reporting. Referral follow-up sequences. The system gets more comprehensive and more tailored to how your specific firm operates.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-period">
+        <div class="tl-period-label">Phase 4</div>
+        <div class="tl-period-months">Months 9–12</div>
+      </div>
+      <div class="tl-content">
+        <div class="tl-content-title">Compounding returns</div>
+        <div class="tl-content-desc">Your firm is running materially differently than when we started. The infrastructure is yours. Starting over with someone new costs more than staying — and most firms are already planning their renewal before month 10.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PRICING -->
+<section class="alt" id="pricing">
+  <div class="section-label">Pricing</div>
+  <div class="section-title">Straightforward. No surprises.</div>
+  <div class="section-sub">Start with a pilot if you want to see results before committing. Most firms convert after week two.</div>
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="pricing-tier">Pilot</div>
+      <div class="pricing-price">$2,000<span> flat</span></div>
+      <div class="pricing-desc">30 days. No commitment. See what the systems can do before you sign a 12-month agreement.</div>
+      <div class="pricing-feature"><span class="check">✓</span> 1 core workflow automated</div>
+      <div class="pricing-feature"><span class="check">✓</span> HomeBiddy + HomeIQ deployed</div>
+      <div class="pricing-feature"><span class="check">✓</span> Coordinator onboarded</div>
+      <div class="pricing-feature"><span class="check">✓</span> Converts to annual at month 2</div>
+    </div>
+    <div class="pricing-card featured">
+      <div class="featured-badge">Most popular</div>
+      <div class="pricing-tier light">Annual</div>
+      <div class="pricing-price light">$3,500<span class="light">/mo</span></div>
+      <div class="pricing-desc light">12-month engagement. $1,500 implementation fee. Full operations absorbed from day one.</div>
+      <div class="pricing-feature light"><span class="check">✓</span> All automations included</div>
+      <div class="pricing-feature light"><span class="check">✓</span> Dedicated ReSync coordinator</div>
+      <div class="pricing-feature light"><span class="check">✓</span> HomeBiddy + HomeIQ for your clients</div>
+      <div class="pricing-feature light"><span class="check">✓</span> New automation builds monthly</div>
+      <div class="pricing-feature light"><span class="check">✓</span> Priority support</div>
+    </div>
+    <div class="pricing-card">
+      <div class="pricing-tier">Enterprise</div>
+      <div class="pricing-price">Custom</div>
+      <div class="pricing-desc">Multi-office brokerages and franchise groups. Custom scope, dedicated team, volume pricing.</div>
+      <div class="pricing-feature"><span class="check">✓</span> Multi-location support</div>
+      <div class="pricing-feature"><span class="check">✓</span> Custom integrations</div>
+      <div class="pricing-feature"><span class="check">✓</span> Dedicated account team</div>
+      <div class="pricing-feature"><span class="check">✓</span> Quarterly business reviews</div>
+    </div>
+  </div>
+  <div class="why-box">
+    <p><strong>Why 12 months?</strong> Month one is implementation. Months 2–4 is refinement. Months 5–12 is where the ROI compounds as we keep building on what we've learned about your firm. The firms that get the full return are the ones that stay long enough to see it. Most are already planning their renewal before the year is out.</p>
+  </div>
+</section>
+
+<!-- FOOTER CTA -->
+<div class="footer-cta" id="contact">
+  <h2>Start with a 30-day pilot.</h2>
+  <p>No commitment. See the results before you sign anything. Most firms convert to annual after week two.</p>
+  <a href="#" class="btn-primary" style="font-size:15px;padding:14px 32px;">Book a free 20-minute call</a>
+  <div class="footer-note">ReSync · resync.co · Mark</div>
+</div>
+
+</body>
+</html>
