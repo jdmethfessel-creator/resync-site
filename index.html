@@ -368,12 +368,12 @@
 
   .coord-comparison { display: flex; flex-direction: column; gap: 14px; }
 
-  .coord-row { display: flex; justify-content: space-between; align-items: center; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+  .coord-row { display: grid; grid-template-columns: 1fr 140px 140px; column-gap: 40px; align-items: center; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
   .coord-row:last-child { border-bottom: none; padding-bottom: 0; }
   .coord-label { font-size: 12px; color: var(--gray); }
-  .coord-old { font-size: 13px; color: #ef4444; min-width: 140px; text-align: right; }
-  .coord-new { font-size: 13px; color: #4ade80; font-weight: 500; min-width: 140px; text-align: right; }
-  .coord-head { font-size: 11px; color: var(--gray); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; min-width: 140px; text-align: right; }
+  .coord-old { font-size: 13px; color: #ef4444; text-align: center; }
+  .coord-new { font-size: 13px; color: #4ade80; font-weight: 500; text-align: center; }
+  .coord-head { font-size: 11px; color: var(--gray); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; text-align: center; }
 
   /* ROI */
   .roi-grid {
@@ -510,6 +510,7 @@
     section { padding: 48px 20px; }
     .products-grid, .auto-grid, .roi-grid, .pricing-grid { grid-template-columns: 1fr; }
     .coord-box { grid-template-columns: 1fr; }
+    .coord-row { grid-template-columns: 1fr 110px 110px; column-gap: 20px; }
     .stats-row { grid-template-columns: 1fr; gap: 20px; }
     .stat-mid { border: none; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 20px 0; }
     .footer-cta { padding: 48px 20px; }
@@ -662,38 +663,28 @@
       <div class="coord-comparison">
         <div class="coord-row">
           <div class="coord-label"></div>
-          <div style="display:flex;gap:16px;align-items:center;">
-            <div class="coord-head">Today</div>
-            <div class="coord-head">With ReSync</div>
-          </div>
+          <div class="coord-head">Today</div>
+          <div class="coord-head">With ReSync</div>
         </div>
         <div class="coord-row">
           <div class="coord-label">Repetitive admin work</div>
-          <div style="display:flex;gap:16px;align-items:center;">
-            <div class="coord-old">Eats your team's hours</div>
-            <div class="coord-new">Automated</div>
-          </div>
+          <div class="coord-old">Eats your team's hours</div>
+          <div class="coord-new">Automated</div>
         </div>
         <div class="coord-row">
           <div class="coord-label">Client-facing tech</div>
-          <div style="display:flex;gap:16px;align-items:center;">
-            <div class="coord-old">Same tools as everyone else</div>
-            <div class="coord-new">Tools competitors don't have</div>
-          </div>
+          <div class="coord-old">Same tools as everyone else</div>
+          <div class="coord-new">Tools competitors don't have</div>
         </div>
         <div class="coord-row">
           <div class="coord-label">Operations capacity</div>
-          <div style="display:flex;gap:16px;align-items:center;">
-            <div class="coord-old">Capped by your headcount</div>
-            <div class="coord-new">Scales without hiring</div>
-          </div>
+          <div class="coord-old">Capped by your headcount</div>
+          <div class="coord-new">Scales without hiring</div>
         </div>
         <div class="coord-row">
           <div class="coord-label">Systems over time</div>
-          <div style="display:flex;gap:16px;align-items:center;">
-            <div class="coord-old">Static</div>
-            <div class="coord-new">New automations every month</div>
-          </div>
+          <div class="coord-old">Static</div>
+          <div class="coord-new">New automations every month</div>
         </div>
       </div>
     </div>
