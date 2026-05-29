@@ -371,8 +371,9 @@
   .coord-row { display: flex; justify-content: space-between; align-items: center; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
   .coord-row:last-child { border-bottom: none; padding-bottom: 0; }
   .coord-label { font-size: 12px; color: var(--gray); }
-  .coord-old { font-size: 13px; color: #ef4444; text-decoration: line-through; }
-  .coord-new { font-size: 13px; color: #4ade80; font-weight: 500; }
+  .coord-old { font-size: 13px; color: #ef4444; min-width: 140px; text-align: right; }
+  .coord-new { font-size: 13px; color: #4ade80; font-weight: 500; min-width: 140px; text-align: right; }
+  .coord-head { font-size: 11px; color: var(--gray); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; min-width: 140px; text-align: right; }
 
   /* ROI */
   .roi-grid {
@@ -660,31 +661,38 @@
     <div class="coord-right">
       <div class="coord-comparison">
         <div class="coord-row">
-          <div class="coord-label">Annual cost</div>
+          <div class="coord-label"></div>
           <div style="display:flex;gap:16px;align-items:center;">
-            <div class="coord-old">$55,000 hire</div>
-            <div class="coord-new">$54,000 ReSync</div>
+            <div class="coord-head">Today</div>
+            <div class="coord-head">With ReSync</div>
           </div>
         </div>
         <div class="coord-row">
-          <div class="coord-label">Benefits & overhead</div>
+          <div class="coord-label">Repetitive admin work</div>
           <div style="display:flex;gap:16px;align-items:center;">
-            <div class="coord-old">+$12,000</div>
-            <div class="coord-new">$0</div>
+            <div class="coord-old">Eats your team's hours</div>
+            <div class="coord-new">Automated</div>
           </div>
         </div>
         <div class="coord-row">
-          <div class="coord-label">Client software tools</div>
+          <div class="coord-label">Client-facing tech</div>
           <div style="display:flex;gap:16px;align-items:center;">
-            <div class="coord-old">Not included</div>
-            <div class="coord-new">Included</div>
+            <div class="coord-old">Same tools as everyone else</div>
+            <div class="coord-new">Tools competitors don't have</div>
           </div>
         </div>
         <div class="coord-row">
-          <div class="coord-label">Monthly new automations</div>
+          <div class="coord-label">Operations capacity</div>
           <div style="display:flex;gap:16px;align-items:center;">
-            <div class="coord-old">Not included</div>
-            <div class="coord-new">Included</div>
+            <div class="coord-old">Capped by your headcount</div>
+            <div class="coord-new">Scales without hiring</div>
+          </div>
+        </div>
+        <div class="coord-row">
+          <div class="coord-label">Systems over time</div>
+          <div style="display:flex;gap:16px;align-items:center;">
+            <div class="coord-old">Static</div>
+            <div class="coord-new">New automations every month</div>
           </div>
         </div>
       </div>
